@@ -7,45 +7,54 @@ const {
 	unregisterBlockStyle,
 } = wp.blocks;
 
-const reducer = ( state = {}, { type, data } ) => {
+const reducer = ( state = {}, action ) => {
+	switch ( action.type ) {
+		case 'ADD_BLOCK_STYLE':
 
-	if ( type === 'ADD_BLOCK_STYLE' ) {
+			const newState = Object.assign( {}, state );
 
-		if ( typeof state[ data.blockType ] === "undefined" ) {
-			state[ data.blockType ] = {};
-		}
+			if ( typeof newState[ action.data.blockType ] === "undefined" ) {
+				newState[ action.data.blockType ] = {};
+			}
 
-		state[ data.blockType ][ data.blockStyle.name ] = {
-			label: data.blockStyle.label,
-			isDefault: data.blockStyle.isDefault,
-			attributes: data.attributes
-		};
+			newState[ action.data.blockType ][ action.data.blockStyle.name ] = {
+				label: action.data.blockStyle.label,
+				isDefault: action.data.blockStyle.isDefault || false,
+				attributes: action.data.attributes
+			};
 
-//		registerBlockStyle( data.blockType, data.blockStyle );
-
-		return state;
+			return newState;
 	}
 
 	return state;
 }
 
-// These are some selectors
-function getBlockStyles( state, blockType ) {
-	return state[ blockType ];
+const actions = {
+
+
+	addBlockStyle( blockType, blockStyle, attributes, register = true ) {
+
+		if ( register ) {
+			registerBlockStyle( blockType, blockStyle );
+		}
+
+		return {
+			type: 'ADD_BLOCK_STYLE',
+			data: { blockType, blockStyle, attributes }
+		};
+	}
 }
 
-// These are the actions
-function addBlockStyle( blockType, blockStyle, attributes ) {
-	return {
-		type: 'ADD_BLOCK_STYLE',
-		data: { blockType, blockStyle, attributes }
-	};
+const selectors = {
+	getBlockStyles( state ) {
+		return state;
+	}
 }
 
 registerStore( 'block-styles', {
 	reducer,
-	selectors: { getBlockStyles: getBlockStyles },
-	actions: { addBlockStyle: addBlockStyle }
+	selectors,
+	actions
 } );
 
 // Add a new todo item

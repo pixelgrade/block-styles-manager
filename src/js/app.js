@@ -1,17 +1,16 @@
 import '../scss/style.scss';
 import './store';
+import BlockStylesList from './components/block-styles-list';
+
+const { __ } = wp.i18n;
 
 const {
 	registerPlugin
 } = wp.plugins;
 
 const {
-	PanelBody,
-} = wp.components;
-
-const {
-	Fragment
-} = wp.element;
+	registerBlockType
+} = wp.blocks;
 
 const {
 	PluginSidebar
@@ -28,9 +27,7 @@ const {
 
 const {
 	dispatch,
-	subscribe,
-	select,
-	withSelect
+	select
 } = wp.data;
 
 wp.domReady( () => {
@@ -40,6 +37,12 @@ wp.domReady( () => {
 		let blockStyles = select( 'core/blocks' ).getBlockStyles( blockType.name );
 		const styles = blockType.styles;
 
+		styles && styles.map( style => {
+			console.log( blockType.name, style );
+
+			dispatch( 'block-styles' ).addBlockStyle( blockType.name, style, {} );
+		} );
+
 		dispatch( 'block-styles' ).addBlockStyle( blockType.name, {
 			name: 'custom',
 			label: 'Custom',
@@ -48,34 +51,12 @@ wp.domReady( () => {
 	} );
 } );
 
-function BlockStylesList( props ) {
-	return (
-		<div>
-			{ Object.keys( props.blockStyles, blockStyleName => {
-				return <div>{blockStyleName}</div>
-			} ) }
-		</div>
-	);
-}
-
-function mapSelectToProps( select ) {
-	const { getBlockStyles } = select( 'block-styles' );
-	const selectedBlock = select( 'core/editor' ).getSelectedBlock();
-	console.log( 'changed' );
-	return {
-		blockStyles: getBlockStyles( selectedBlock.name )
-	}
-}
-
-const BlockStylesListWithSelect = withSelect( mapSelectToProps )( BlockStylesList );
-
 registerPlugin( 'block-style-manager-sidebar', {
 	render() {
 
 		return (
 			<PluginSidebar>
-				<BlockStylesListWithSelect />
-				<InspectorControls.Slot />
+				<BlockStylesList />
 			</PluginSidebar>
 		)
 	}
