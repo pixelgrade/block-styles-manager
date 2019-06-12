@@ -42,7 +42,6 @@ const reducer = ( state = {}, action ) => {
 			return newState;
 
 		case 'UPDATE_ALL_BLOCK_STYLES':
-			console.log( action.data.blockStyles );
 			return action.data.blockStyles
 	}
 
@@ -115,7 +114,6 @@ const reduxStore = createStore( reducer, applyMiddleware( middleware ) );
 
 const mappedSelectors = Object.keys( selectors ).reduce( ( acc, selectorKey ) => {
 	acc[ selectorKey ] = ( ...args ) => {
-		console.log( reduxStore.getState() );
 		return selectors[ selectorKey ]( reduxStore.getState(), ...args );
 	}
 	return acc;

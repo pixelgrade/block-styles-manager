@@ -246,7 +246,8 @@ export default compose([
 			return wp.apiFetch({
 				method: 'POST',
 				path: 'block-styles/v1/styles',
-				data: { blockStyles }
+				data: { styles: blockStyles }
+			}).then(response => {
 			});
 		}
 
@@ -264,6 +265,7 @@ export default compose([
 	withDispatch( ( dispatch, props ) => {
 		return {
 			onChangeStyle( selectedBlock, attributes ) {
+				console.log( attributes );
 				dispatch( 'core/block-editor' ).updateBlockAttributes( selectedBlock.clientId, attributes );
 			},
 			deleteStyle( style ) {

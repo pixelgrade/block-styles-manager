@@ -33,23 +33,26 @@ const {
 
 wp.domReady( () => {
 
-	wp.data.dispatch( 'block-styles' ).fetchBlockStyles().then( myStyles => {
-
+	wp.data.dispatch( 'block-styles' ).fetchBlockStyles().then( () => {
+		const myStyles = select( 'block-styles' ).getBlockStyles();
+		console.log( myStyles );
 		const blockTypes = select( 'core/blocks' ).getBlockTypes();
 
-		blockTypes.map( blockType => {
-			let blockStyles = select( 'core/blocks' ).getBlockStyles( blockType.name );
-			const styles = blockType.styles;
+		if ( myStyles && blockTypes ) {
+			blockTypes.map( blockType => {
+				const blockStyles = myStyles[blockType.name];
+				const styles = blockType.styles;
 
-			if ( ! myStyles[blockType.name] || ! myStyles[blockType.name].length ) {
-				dispatch( 'block-styles' ).addBlockStyle( blockType.name, {
-					name: 'custom',
-					label: 'Custom',
-					isDefault: true,
-					attributes: {}
-				} );
-			}
-		});
+				if ( ! blockStyles || ! blockStyles.length ) {
+					dispatch( 'block-styles' ).addBlockStyle( blockType.name, {
+						name: 'custom',
+						label: 'Custom',
+						isDefault: true,
+						attributes: {}
+					} );
+				}
+			});
+		}
 	});
 } );
 
