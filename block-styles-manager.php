@@ -52,3 +52,31 @@ function _get_plugin_url() {
 }
 
 include __DIR__ . '/lib/enqueue-scripts.php';
+
+function get_block_styles() {
+	$styles = get_option( 'block-styles', '' );
+	return $styles;
+}
+
+function update_block_styles( $request ) {
+	$styles = $request->get_param( 'styles' );
+	update_option( 'block-styles', $styles );
+	return $styles;
+}
+
+function block_styles_endpoints() {
+	add_action( 'rest_api_init', function () {
+		register_rest_route( 'block-styles/v1','/styles', array(
+			'methods' => 'GET',
+			'callback' => 'get_block_styles',
+		) );
+	} );
+
+	add_action( 'rest_api_init', function () {
+		register_rest_route( 'block-styles/v1','/styles', array(
+			'methods' => 'POST',
+			'callback' => 'update_block_styles',
+		) );
+	} );
+}
+add_action( 'init', 'block_styles_endpoints' );

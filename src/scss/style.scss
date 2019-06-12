@@ -1,3 +1,26 @@
-body {
-    margin: 0;
+.block-editor-block-styles__item--new {
+
+    .block-editor-block-styles__item-preview {
+        position: relative;
+
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: currentColor;
+        }
+
+        &:before {
+            width: 10px;
+            height: 2px;
+        }
+
+        &:after {
+            width: 2px;
+            height: 10px;
+        }
+    }
 }

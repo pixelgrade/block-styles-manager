@@ -1,2 +1,15 @@
-body {
-  margin: 0; }
+.block-editor-block-styles__item--new .block-editor-block-styles__item-preview {
+  position: relative; }
+  .block-editor-block-styles__item--new .block-editor-block-styles__item-preview:before, .block-editor-block-styles__item--new .block-editor-block-styles__item-preview:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: currentColor; }
+  .block-editor-block-styles__item--new .block-editor-block-styles__item-preview:before {
+    width: 10px;
+    height: 2px; }
+  .block-editor-block-styles__item--new .block-editor-block-styles__item-preview:after {
+    width: 2px;
+    height: 10px; }

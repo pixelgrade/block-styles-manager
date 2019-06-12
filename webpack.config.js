@@ -3,6 +3,9 @@ const webpack = require( 'webpack' );
 const ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
 // Set different CSS extraction for editor only and common block styles
+const CSSPlugin = new ExtractTextPlugin( {
+	filename: './assets/css/style.css',
+} );
 const blocksCSSPlugin = new ExtractTextPlugin( {
 	filename: './assets/css/blocks.style.css',
 } );
@@ -47,14 +50,11 @@ module.exports = {
 				exclude: /(node_modules|bower_components)/,
 				use: {
 					loader: 'babel-loader',
-					query: {
-						presets: [ "react", "@wordpress/default" ],
-					}
 				},
 			},
 			{
 				test: /style\.s?css$/,
-				use: blocksCSSPlugin.extract( extractConfig ),
+				use: CSSPlugin.extract( extractConfig ),
 			},
 			{
 				test: /editor\.s?css$/,
@@ -63,6 +63,7 @@ module.exports = {
 		],
 	},
 	plugins: [
+		CSSPlugin,
 		blocksCSSPlugin,
 		editBlocksCSSPlugin,
 	],
